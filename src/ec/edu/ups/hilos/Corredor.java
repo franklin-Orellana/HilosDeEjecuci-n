@@ -13,103 +13,73 @@ import java.util.Scanner;
  * @author Fernanda
  */
 public class Corredor {
-    /*
-    private String nombre;
-    private int velocidad;
 
-    public Corredor(String nombre, int velocidad) {
-        this.nombre = nombre;
-        this.velocidad = 1000;
-    }
-    /*
-    @Override
-    public void run() {
-        try{
-            System.out.println("Inicia: ");
-            long inicio = System.currentTimeMillis();
-            Thread.sleep(velocidad);
-            long fin = System.currentTimeMillis();
-            System.out.println("Tiempo de llegada: " + this.nombre + " es " + (fin - inicio));
-        }catch(InterruptedException ex){
-            ex.printStackTrace();
-        }
-    }
-    */
     public void Matriz() {
         Random randon = new Random();
         Scanner sn = new Scanner(System.in);
-        System.out.println("Ingrese numero de filas");
-        int f1 = sn.nextInt();
-        System.out.println("Ingrese numero de columnas");
-        int c1 = sn.nextInt();
+        System.out.println("Ingrese dimension de matriz");
+        int ma1 = sn.nextInt();
 
-        int[][] m1 = new int[f1][c1];
-        int[][] m2 = new int[f1][c1];
+        int[][] m1 = new int[ma1][ma1];
+        int[][] m2 = new int[ma1][ma1];
+        int valor = m1.length;
+        int[][] res = new int[ma1][ma1];
+        int[][] res1 = new int[ma1][ma1];
 
-        int[][] res = new int[f1][c1];
-        int[][] subMat1 = new int[25][25];
-        int[][] subMat2 = new int[50][25];
-        int[][] subMat3 = new int[75][25];
-        int[][] subMat4 = new int[100][25];
-        int cont = -1;
-        int cont1 = -1;
-        int cont2 = -1;
-        int cont3 = -1;
-        for (int i = 0; i < m1.length; i++) {
-            for (int j = 0; j < m1[0].length; j++) {
+        long inicio1 = System.currentTimeMillis();
+
+        for (int i = 0; i < ma1; i++) {
+            for (int j = 0; j < ma1; j++) {
                 m1[i][j] = randon.nextInt(10);
+            }
+        }
+        for (int i = 0; i < ma1; i++) {
+            for (int j = 0; j < ma1; j++) {
                 m2[i][j] = randon.nextInt(10);
-                res[i][j] = (m1[i][j] + m2[i][j]);
             }
         }
-        
-        for (int i = 0; i < 25; i++) {
-            for (int j = 0; j < 25; j++) {
-                subMat1[i][j] = res[i][j];
+        for (int i = 0; i < ma1; i++) {
+            for (int j = 0; j < ma1; j++) {
+                res[i][j] = m1[i][j] + m2[i][j];
             }
-        }
-        for (int i = 0; i < 50; i++) {
-       
-            for (int j = 25; j < 50; j++) {
-                cont++;
-                subMat2[i][cont] = res[i][j];
-            }
-            cont=-1;
-        }
-        for (int i = 0; i < 75; i++) {
-  
-            for (int j = 50; j < 75; j++) {
-                cont1++;
-                subMat3[i][cont1] = res[i][j];
-            }
-            cont1=-1;
-        }
-        for (int i = 0; i < 100; i++) {
-
-            for (int j = 75; j < 100; j++) {
-                cont2++;
-                subMat4[i][cont2] = res[i][j];
-            }
-            cont2=-1;
         }
 
+        long fin1 = System.currentTimeMillis();
+        System.out.println("Tiempo de Suma sin hilos: " + (fin1 - inicio1));
 
-        System.out.println("Matriz 1");
-        mostrarMatriz(m1);
-        System.out.println("Matriz 2");
-        mostrarMatriz(m2);
-        System.out.println("Respuesta");
+        /*
+         System.out.println("Matriz 1");
+         mostrarMatriz(m1);
+         System.out.println("Matriz 2");
+         mostrarMatriz(m2);
+         System.out.println("Respuesta");
+         mostrarMatriz(res);
+         */
+        System.out.println("Respuesta Suma: ");
         mostrarMatriz(res);
 
-        
-        System.out.println("SubMatriz1");
-        mostrarMatriz(subMat1);
-        System.out.println("SubMatriz2");
-        mostrarMatriz(subMat2);
-        System.out.println("SubMatriz3");
-        mostrarMatriz(subMat3);
-        System.out.println("SubMatriz4");
-        mostrarMatriz(subMat4);
+        int posicion1 = 0;
+        int posicion = m1.length / 4;
+        SumaDeHilos[] hilos = new SumaDeHilos[4];
+        long inicio2 = System.currentTimeMillis();
+        for (int i = 0; i < 4 - 1; i++) {
+            hilos[i] = new SumaDeHilos(m1, m2, res1, posicion1, posicion);
+            hilos[i].start();
+            posicion1 = posicion;
+            posicion = posicion + posicion;
+        }/*
+         hilos[0] = new SumaDeHilos(m1, m2, res1, 0, posicion);
+         hilos[1] = new SumaDeHilos(m1, m2, res1, posicion, (2*posicion));
+         hilos[2] = new SumaDeHilos(m1, m2, res1, (2*posicion), (3*posicion));
+         hilos[3] = new SumaDeHilos(m1, m2, res1, (3*posicion), valor);
+         hilos[0].start();
+         hilos[1].start();
+         hilos[2].start();
+         hilos[3].start();
+         */
+
+        long fin2 = System.currentTimeMillis();
+        System.out.println("Tiempo de suma con hilos Secuencias: " + (fin2 - inicio2));
 
     }
 
@@ -123,7 +93,5 @@ public class Corredor {
             System.out.println("");
         }
     }
-
-    
 
 }
