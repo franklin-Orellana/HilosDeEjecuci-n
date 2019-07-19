@@ -5,10 +5,23 @@
  */
 package ec.edu.ups.principal;
 
+import java.util.Scanner;
+import ec.edu.ups.hilos.Corredor;
 /**
  *
  * @author Fernanda
  */
 public class Principal {
+    public static void main(String[] args) {
+        
+        Corredor corredor = new Corredor();
+        
+        corredor.Matriz();
+        
+        
+    }
+    
+    
+    
     
 }
